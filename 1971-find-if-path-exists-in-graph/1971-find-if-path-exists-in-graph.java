@@ -1,41 +1,37 @@
 class Solution {
-    public boolean validPath(int n, int[][] edges, int start, int end) {
-        List<List<Integer>> adjacency_list = new ArrayList<>();        
-        for (int i = 0; i < n; i++) {
-            adjacency_list.add(new ArrayList<>());
+    public boolean validPath(int n, int[][] edges, int source, int destination) {
+        Stack<Integer> stack = new Stack();
+        
+        boolean[] visited = new boolean[n];
+        
+        if (edges.length == 0 || source == destination) {
+            return true;
         }
         
-        for (int[] edge : edges) {
-            adjacency_list.get(edge[0]).add(edge[1]);
-            adjacency_list.get(edge[1]).add(edge[0]);
-        }
+        stack.push(source);
         
-        Deque<Integer> stack = new ArrayDeque<>();
-        stack.push(start);
-        boolean seen[] = new boolean[n];
-        Arrays.fill(seen, false);
-        
-        while (!stack.isEmpty()) {
-            // Get the current node.
-            int node = stack.pop();
-            
-            // Check if we have reached the target node.
-            if (node == end) {
+        while (!stack.empty()) {
+            int v1 = stack.pop();
+            if (v1 == destination) {
                 return true;
             }
             
-            // Check if we've already visited this node.
-            if (seen[node]) {
-                continue;
-            }
-            seen[node] = true;
+            visited[v1] = true;
             
-            // Add all neighbors to the stack.
-            for (int neighbor : adjacency_list.get(node)) {
-                stack.push(neighbor);
+            for (int i = 0; i < edges.length; i++) {
+                if (edges[i][0] == v1 && !visited[edges[i][1]]) {
+                    if (edges[i][1] == destination) {
+                        return true;
+                    }
+                    stack.push(edges[i][1]);
+                } else if (edges[i][1] == v1 && !visited[edges[i][0]]) {
+                    if (edges[i][0] == destination) {
+                        return true;
+                    }
+                    stack.push(edges[i][0]);
+                }
             }
         }
-        
         return false;
     }
 }
