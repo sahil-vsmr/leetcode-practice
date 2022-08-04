@@ -1,31 +1,45 @@
 class Solution {
-    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        int[] result = new int[nums1.length + nums2.length];
-        int m = nums1.length;
-        int n = nums2.length;
-        int i = 0;
-        int j = 0;
-        int counter = 0;
-        
-        while (i < nums1.length || j < nums2.length) {
-            boolean presentIn1 = i < nums1.length;
-            boolean presentIn2 = j < nums2.length;
-            
-            if (presentIn1 && presentIn2) {
-                result[counter++] = nums1[i] < nums2[j] ? nums1[i++] : nums2[j++];
-            } else if (presentIn1) {
-                result[counter++] = nums1[i++];
-            } else {
-                result[counter++] = nums2[j++];
+    int imx = Integer.MAX_VALUE;
+    int imi = Integer.MIN_VALUE;
+    public double findMedianSortedArrays(int[] a, int[] b) {
+        int n = a.length;
+        int m = b.length;
+        if(n > m){
+            return findMedianSortedArrays(b , a);
+        }
+        if(n == 0){
+            int mid = m / 2;
+            if(m % 2 == 0){
+                return (double)(b[mid] + b[mid - 1]) / (double)2;
+            }
+            else{
+                return (double)b[mid];
             }
         }
-        
-        if ((m+n)%2 == 0) {
-            int element1 = result[(m+n)/2];
-            int element2 = result[(m+n)/2 -1];
-            return (element1 + element2)/2.0;
-        } else {
-            return result[(m+n)/2];
+        int l = 0;
+        int r = n;
+        while(l <= r){
+            int ela = (l + r) / 2; // elements from 'a'
+            int elb = (n + m + 1) / 2 - ela;
+            int l1 = ela == 0 ? imi : a[ela - 1];
+            int r1 = ela == n ? imx : a[ela];
+            int l2 = elb == 0 ? imi : b[elb - 1];
+            int r2 = elb == m ? imx : b[elb];
+            if(l1 <= r2 && l2 <= r1){
+                if((n + m) % 2 == 0){
+                    return (double)(Math.max(l1 , l2) + Math.min(r1 , r2)) / (double)2;
+                }
+                else{
+                    return (double)Math.max(l1 , l2);
+                }
+            }
+            if(l1 > r2){
+                r = ela - 1;
+            }
+            else{
+                l = ela + 1;
+            }
         }
+        return -1;
     }
 }
