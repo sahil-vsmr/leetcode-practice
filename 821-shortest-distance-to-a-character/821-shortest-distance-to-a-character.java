@@ -12,6 +12,10 @@ class Solution {
         
         for (int i = 0; i < s.length(); i++) {
             int min = Integer.MAX_VALUE;
+            if (s.charAt(i) == c) {
+                answer[i] = 0;
+                continue;
+            }
             for (int position: positions) {
                 min = min > Math.abs(position - i) ? Math.abs(position - i) : min;
             }
