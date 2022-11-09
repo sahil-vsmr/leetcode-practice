@@ -1,0 +1,15 @@
+int[] getMaxMin(int[] arr) {
+    int result[] = new int[2];
+
+    int min = Integer.MAX_VALUE;
+    int max = Integer.MIN_VALUE;
+
+    for (int num: arr) {
+        min = num < min ? num : min;
+        max = num > max ? num : max;
+    }
+    result[0] = min;
+    result[1] = max;
+
+    return result;
+}
